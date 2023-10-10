@@ -14,7 +14,7 @@ export const getPinnedComment = async (
   )
   const pinnedBotComment = comments.find(
     (el: any) =>
-      el.user.login === "merge-to-earn[bot]" &&
+      el.user.login === "code-connect-eth-mte[bot]" &&
       el.body.includes(`### 👋 Gm @${user.login}`)
   )
   return pinnedBotComment

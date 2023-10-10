@@ -1,0 +1,18 @@
+
+tasks:
+  - name: postgres
+    command: |
+     docker run --name="db_max" --rm -d -p 5432:5432 \
+      -e POSTGRES_PASSWORD=max_pass \
+      -e POSTGRES_USER=max_user \
+      -e POSTGRES_DB=max_db \
+      postgres -c log_statement=all
+      npx prisma push db
+      sleep 12
+      gp sync-done db
+      npx prisma db push
+      docker exec -it db_max psql -U max_user max_db
+  - init: npm install
+    command: gp sync-await db && npm run dev
+
+

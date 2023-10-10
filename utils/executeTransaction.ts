@@ -26,14 +26,13 @@ const executeTransaction = async (
         })
       }
 
-      const { data: waitData } = await waitForTransaction({ hash: tx.hash })
-
+      const receipt = await waitForTransaction({ hash: tx.hash })
       if (settlementLogic) {
         settlementLogic()
       }
 
       setLoading(false)
-      return waitData
+      return receipt
     } catch (err) {
       console.log(err)
     }

@@ -4,74 +4,74 @@ import {
   ExpandItem,
   FormGithub,
   FormSafes,
-  FormSlicer
-} from "@components/ui"
-import handleMessage, { Message } from "@utils/handleMessage"
-import { ContractReceipt, ethers } from "ethers"
-import { useEffect, useState } from "react"
-import { useContractWrite, usePrepareContractWrite } from "wagmi"
-import { useAppContext } from "../context"
-import { SlicerOwner } from "../FormSlicer/FormSlicer"
-import sliceCore from "abi/SliceCore.json"
-import launchConfetti from "@utils/launchConfetti"
-import executeTransaction from "@utils/executeTransaction"
-import { useAddRecentTransaction } from "@rainbow-me/rainbowkit"
-import { LogDescription } from "ethers/lib/utils"
-import { GithubCircle } from "@components/icons/Social"
-import { signIn, useSession } from "next-auth/react"
-import fetcher from "@utils/fetcher"
-import useSWR from "swr"
-import { Repo, RepoResponse } from "../FormGithub/FormGithub"
-import saEvent from "@utils/saEvent"
-import { useEthersSigner } from "@utils/ethers"
+  FormSlicer,
+} from "@components/ui";
+import handleMessage, { Message } from "@utils/handleMessage";
+import { ContractReceipt, ethers } from "ethers";
+import { useEffect, useState } from "react";
+import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import { useAppContext } from "../context";
+import { SlicerOwner } from "../FormSlicer/FormSlicer";
+import sliceCore from "abi/SliceCore.json";
+import launchConfetti from "@utils/launchConfetti";
+import executeTransaction from "@utils/executeTransaction";
+import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
+import { LogDescription } from "ethers/lib/utils";
+import { GithubCircle } from "@components/icons/Social";
+import { signIn, useSession } from "next-auth/react";
+import fetcher from "@utils/fetcher";
+import useSWR from "swr";
+import { Repo, RepoResponse } from "../FormGithub/FormGithub";
+import saEvent from "@utils/saEvent";
+import { useEthersSigner } from "@utils/ethers";
 
 const Main = () => {
-  const addRecentTransaction = useAddRecentTransaction()
-  const { data: session } = useSession()
-  const { account, setModalView } = useAppContext()
+  const addRecentTransaction = useAddRecentTransaction();
+  const { data: session } = useSession();
+  const { account, setModalView } = useAppContext();
 
-  const env = process.env.NEXT_PUBLIC_ENV
-  const baseUrl = `https://safe-transaction-${env}.safe.global/`
-  const delegateAddress = process.env.NEXT_PUBLIC_DELEGATE
+  const env = process.env.NEXT_PUBLIC_ENV;
+  const baseUrl = `https://safe-transaction-${env}.safe.global/`;
+  const delegateAddress = process.env.NEXT_PUBLIC_DELEGATE;
 
-  const [loading, setLoading] = useState(false)
-  const [signature, setSignature] = useState("")
-  const [uploadStep, setUploadStep] = useState(0)
-  const [message, setMessage] = useState<Message>()
+  const [loading, setLoading] = useState(false);
+  const [signature, setSignature] = useState("");
+  const [uploadStep, setUploadStep] = useState(0);
+  const [message, setMessage] = useState<Message>();
 
-  const [repo, setRepo] = useState<Repo>()
-  const [safeAddress, setSafeAddress] = useState("")
-  const [slicerOwners, setSlicerOwners] = useState<SlicerOwner[]>([])
-  const [currencies, setCurrencies] = useState<`0x${string}`[]>([])
-  const [slicerId, setSlicerId] = useState(0)
+  const [repo, setRepo] = useState<Repo>();
+  const [safeAddress, setSafeAddress] = useState("");
+  const [slicerOwners, setSlicerOwners] = useState<SlicerOwner[]>([]);
+  const [currencies, setCurrencies] = useState<`0x${string}`[]>([]);
+  const [slicerId, setSlicerId] = useState(0);
 
   const { data: isUnsetRepo } = useSWR(
     repo ? `/api/connection/get?repoId=${repo.repoId}` : null,
     fetcher
-  )
+  );
   const {
-    data: repoList
+    data: repoList,
   }: {
-    data?: RepoResponse[]
+    data?: RepoResponse[];
   } = useSWR(
     session?.accessToken ? `/api/getRepo?token=${session.accessToken}` : null,
     fetcher
-  )
+  );
 
-  const signer = useEthersSigner()
+  const signer = useEthersSigner();
 
   const payees = slicerOwners
     .filter((el) => el.account && el.shares > 0)
     .map((el) => {
-      el["transfersAllowedWhileLocked"] = false
-      return el
-    })
+      el["transfersAllowedWhileLocked"] = false;
+      return el;
+    });
 
   const { config } = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_SLICECORE,
     abi: sliceCore.abi,
     functionName: "slice",
-    chainId: process.env.NEXT_PUBLIC_ENV == "goerli" ? 5 : 1,
+    chainId: 8453,
     args: [
       {
         payees,
@@ -81,11 +81,11 @@ const Main = () => {
         transferTimelock: 0,
         controller: safeAddress || account, // use account to prevent triggering console errors before safe is set
         slicerFlags: 6,
-        sliceCoreFlags: 4
-      }
-    ]
-  })
-  const { writeAsync: sliceWriteAsync } = useContractWrite(config)
+        sliceCoreFlags: 4,
+      },
+    ],
+  });
+  const { writeAsync: sliceWriteAsync } = useContractWrite(config);
 
   const addDelegate = async (signature: string) => {
     try {
@@ -96,32 +96,32 @@ const Main = () => {
           delegate: delegateAddress,
           delegator: account,
           signature,
-          label: "Merge to earn"
+          label: "Merge to earn",
         }),
-        method: "POST"
-      }
+        method: "POST",
+      };
 
-      const res = await fetch(`${baseUrl}api/v1/delegates/`, body)
+      const res = await fetch(`${baseUrl}api/v1/delegates/`, body);
 
       if (res.status != 201) {
-        const errorMessage = Object.values(await res.json())[0][0]
+        const errorMessage = Object.values(await res.json())[0][0];
 
         handleMessage(
           { message: errorMessage, messageStatus: "error" },
           setMessage
-        )
+        );
       }
     } catch (error) {}
-  }
+  };
 
   const submit = async (e: React.SyntheticEvent<EventTarget>) => {
-    e.preventDefault()
-    setMessage(null)
-    setSignature("")
-    setLoading(true)
-    setUploadStep(1)
-    setSlicerId(0)
-    saEvent("setup_init")
+    e.preventDefault();
+    setMessage(null);
+    setSignature("");
+    setLoading(true);
+    setUploadStep(1);
+    setSlicerId(0);
+    saEvent("setup_init");
 
     try {
       // const res = await signMessageAsync()
@@ -134,18 +134,18 @@ const Main = () => {
             )
           )
         )
-      )
+      );
       if (!res) {
-        saEvent("setup_fail_signature")
-        setUploadStep(4) // fail
+        saEvent("setup_fail_signature");
+        setUploadStep(4); // fail
       } else {
-        setSignature(res)
-        setUploadStep(2)
+        setSignature(res);
+        setUploadStep(2);
 
         const contract = new ethers.Contract(
           process.env.NEXT_PUBLIC_SLICECORE,
           sliceCore.abi
-        )
+        );
 
         // Create slicer
         const receipt: ContractReceipt = await executeTransaction(
@@ -153,19 +153,19 @@ const Main = () => {
           setLoading,
           `Create slicer`,
           addRecentTransaction
-        )
+        );
         if (receipt) {
           const eventLogs: LogDescription[] = receipt?.logs.map((log) =>
             contract.interface.parseLog(log)
-          )
+          );
           const tokenId = eventLogs?.find((log) => log.name === "TokenSliced")
-            .args.tokenId
+            .args.tokenId;
 
-          setSlicerId(Number(tokenId))
+          setSlicerId(Number(tokenId));
 
-          launchConfetti()
+          launchConfetti();
 
-          setUploadStep(3)
+          setUploadStep(3);
 
           const body = {
             headers: { "Content-type": "application/json" },
@@ -174,40 +174,40 @@ const Main = () => {
               installationId: repo.installationId,
               repoId: repo.repoId,
               slicerId: Number(tokenId),
-              safeAddress
+              safeAddress,
             }),
-            method: "POST"
-          }
-          const res = await fetch("/api/connection/create", body)
-          console.log(await res.json())
+            method: "POST",
+          };
+          const res = await fetch("/api/connection/create", body);
+          console.log(await res.json());
 
           if (res.status == 200) {
-            saEvent("setup_success")
-            setUploadStep(5)
+            saEvent("setup_success");
+            setUploadStep(5);
           } else {
-            saEvent("setup_fail_connection_create")
-            setUploadStep(4) // fail
+            saEvent("setup_fail_connection_create");
+            setUploadStep(4); // fail
           }
         } else {
-          saEvent("setup_fail_tx")
-          setUploadStep(4) // fail
+          saEvent("setup_fail_tx");
+          setUploadStep(4); // fail
         }
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
 
-      saEvent(`setup_fail_${err}`)
-      setUploadStep(4)
+      saEvent(`setup_fail_${err}`);
+      setUploadStep(4);
     }
 
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   useEffect(() => {
     if (signature) {
-      addDelegate(signature.replace(/1b$/, "1f").replace(/1c$/, "20"))
+      addDelegate(signature.replace(/1b$/, "1f").replace(/1c$/, "20"));
     }
-  }, [signature])
+  }, [signature]);
 
   useEffect(() => {
     if (uploadStep != 0) {
@@ -216,11 +216,11 @@ const Main = () => {
         params: {
           uploadStep,
           setModalView,
-          slicerId
-        }
-      })
+          slicerId,
+        },
+      });
     }
-  }, [loading, uploadStep, slicerId])
+  }, [loading, uploadStep, slicerId]);
 
   return session ? (
     <div className="w-full mx-auto space-y-8 max-w-screen-xs">
@@ -283,14 +283,14 @@ const Main = () => {
         </span>
       }
       onClick={() => {
-        saEvent("signin_github_attempt")
-        signIn("github")
+        saEvent("signin_github_attempt");
+        signIn("github");
       }}
       color="text-white bg-black hover:bg-gray-700 focus:bg-gray-700 transition-colors duration-150"
     />
-  )
-}
+  );
+};
 
-export default Main
+export default Main;
 
 // TODO: Fix sign process

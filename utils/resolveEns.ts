@@ -18,7 +18,7 @@ const resolveEns = async (
       }
       setAddress(resolved)
     } catch (err) {
-      setAddress("Invalid ENS name")
+      setAddress(address)
     }
   }
 }

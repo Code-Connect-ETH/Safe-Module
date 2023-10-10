@@ -50,9 +50,7 @@ export const SETUP = (params: any) => {
               <>
                 Created{" "}
                 <a
-                  href={`https://${
-                    process.env.NEXT_PUBLIC_ENV === "goerli" ? "testnet." : ""
-                  }slice.so/slicer/${slicerId}`}
+                  href={`https://base.slice.so/slicer/${slicerId}`}
                   target="_blank"
                   rel="noreferrer"
                   className="highlight"
