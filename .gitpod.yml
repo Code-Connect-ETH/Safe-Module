@@ -7,7 +7,6 @@ tasks:
       -e POSTGRES_USER=max_user \
       -e POSTGRES_DB=max_db \
       postgres -c log_statement=all
-      npx prisma push db
       sleep 12
       gp sync-done db
       docker exec -it db_max psql -U max_user max_db
