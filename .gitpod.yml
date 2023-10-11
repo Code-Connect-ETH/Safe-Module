@@ -10,9 +10,12 @@ tasks:
       npx prisma push db
       sleep 12
       gp sync-done db
-      npx prisma db push
       docker exec -it db_max psql -U max_user max_db
   - init: npm install
-    command: gp sync-await db && npm run dev
+    command: |
+        gp sync-await db
+        cp sample.env .env
+        npx prisma db push
+        npm run dev
 
 
