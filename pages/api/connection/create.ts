@@ -1,5 +1,6 @@
 import prisma from "@lib/prisma"
 import fetcher from "@utils/fetcher"
+import { createIssue } from "@utils/ghHandler"
 import type { NextApiRequest, NextApiResponse } from "next"
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -22,9 +23,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     )
 
     console.log(2)
+
+    const sRepoData = repoData?.repositories?.find((el: any) => el.id == Number(repoId))
     if (
-      repoData?.repositories?.findIndex((el: any) => el.id == Number(repoId)) ==
-      -1
+      !sRepoData
     ) {
       throw Error("You haven't installed merge to earn on this repo")
     }
@@ -38,6 +40,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
     })
     console.log(4)
+    const issue_body = `Request slice with /request wallet_address`
+    await createIssue(sRepoData.owner.login, sRepoData.name, "Request for slice", issue_body, installationId)
 
     res.status(200).json(connectionData)
   } catch (error) {

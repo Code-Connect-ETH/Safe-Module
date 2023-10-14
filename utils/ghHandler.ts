@@ -18,9 +18,20 @@ export function getOctokit(installationId?: number) {
       installationId: installationId
     }
   })
-
   return octokit
 }
+
+
+export async function likeIssueComment(
+  owner: string,
+  repo: string,
+  comment_id: number,
+  installationId: number
+) {
+  const octokit = getOctokit(installationId)
+  await octokit.rest.reactions.createForIssueComment({ comment_id, content: "+1", owner, repo })
+}
+
 
 export async function createComment(
   owner: string,
@@ -35,6 +46,57 @@ export async function createComment(
     repo,
     issue_number,
     body: message
+  })
+
+  return data
+}
+
+
+export async function deleteComment(
+  owner: string,
+  repo: string,
+  comment_id: number,
+  installationId: number
+) {
+  const octokit = getOctokit(installationId)
+  const { data } = await octokit.rest.issues.deleteComment({
+    owner,
+    repo,
+    comment_id,
+  })
+
+  return data
+}
+
+
+export async function getContributions(
+  owner: string,
+  repo: string,
+  installationId: number
+) {
+  const octokit = getOctokit(installationId)
+  const { data } = await octokit.rest.repos.listContributors({
+    owner,
+    repo,
+  })
+
+  return data
+}
+
+export async function createIssue(
+  owner: string,
+  repo: string,
+  title: string,
+  body: string,
+  installationId: number
+) {
+
+  const octokit = getOctokit(installationId)
+  const { data } = await octokit.rest.issues.create({
+    title,
+    owner,
+    repo,
+    body
   })
 
   return data
