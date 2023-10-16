@@ -4,7 +4,7 @@ CREATE TABLE "Connection" (
     "repoId" INTEGER NOT NULL,
     "slicerId" INTEGER NOT NULL,
     "safeAddress" TEXT NOT NULL,
-
+    "spaceName" TEXT NOT NULL,
     CONSTRAINT "Connection_pkey" PRIMARY KEY ("id")
 );
 

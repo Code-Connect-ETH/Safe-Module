@@ -6,6 +6,7 @@ tasks:
       -e POSTGRES_PASSWORD=max_pass \
       -e POSTGRES_USER=max_user \
       -e POSTGRES_DB=max_db \
+      -v /workspace/postgres-data:/var/lib/postgresql/data \
       postgres -c log_statement=all
       sleep 12
       gp sync-done db

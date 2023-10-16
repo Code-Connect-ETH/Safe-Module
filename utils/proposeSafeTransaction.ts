@@ -114,9 +114,9 @@ const updateAccountsToMint = async (
 
   const [, accounts, tokenDiffs] = lastReslice
     ? decoder.decode(
-        ["uint256", "address[]", "int32[]"],
-        "0x" + lastReslice.data.slice(10)
-      )
+      ["uint256", "address[]", "int32[]"],
+      "0x" + lastReslice.data.slice(10)
+    )
     : ([0, [], []] as [number, string[], number[]])
 
   const updatedAccounts = [...accounts]

@@ -1,10 +1,10 @@
 import { Installation } from "@octokit/webhooks-types"
 import fetcher from "@utils/fetcher"
+import { propose } from "@utils/snapshot"
 import type { NextApiRequest, NextApiResponse } from "next"
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { token } = req.query
-
   const Authorization = "Bearer " + token
   const body = {
     headers: {

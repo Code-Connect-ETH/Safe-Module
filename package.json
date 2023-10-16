@@ -17,6 +17,7 @@
     "@octokit/webhooks": "^10.3.0",
     "@prisma/client": "^4.10.0",
     "@rainbow-me/rainbowkit": "^1.0.3",
+    "@snapshot-labs/snapshot.js": "^0.7.3",
     "@types/node": "^15.14.1",
     "@types/react": "^18.0.21",
     "canvas-confetti": "^1.5.1",

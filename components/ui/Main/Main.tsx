@@ -24,6 +24,7 @@ import useSWR from "swr";
 import { Repo, RepoResponse } from "../FormGithub/FormGithub";
 import saEvent from "@utils/saEvent";
 import { useEthersSigner } from "@utils/ethers";
+import FormSpaces from "../FormSpaces";
 
 const Main = () => {
   const addRecentTransaction = useAddRecentTransaction();
@@ -41,6 +42,8 @@ const Main = () => {
 
   const [repo, setRepo] = useState<Repo>();
   const [safeAddress, setSafeAddress] = useState("");
+  const [spaceName, setSpaceName] = useState("");
+
   const [slicerOwners, setSlicerOwners] = useState<SlicerOwner[]>([]);
   const [currencies, setCurrencies] = useState<`0x${string}`[]>([]);
   const [slicerId, setSlicerId] = useState(0);
@@ -175,6 +178,7 @@ const Main = () => {
               repoId: repo.repoId,
               slicerId: Number(tokenId),
               safeAddress,
+              spaceName
             }),
             method: "POST",
           };
@@ -237,6 +241,12 @@ const Main = () => {
               baseUrl={baseUrl}
               safeAddress={safeAddress}
               setSafeAddress={setSafeAddress}
+              message={message}
+            />
+
+            <FormSpaces
+              spaceName={spaceName}
+              setSpaceName={setSpaceName}
               message={message}
             />
 

@@ -83,6 +83,34 @@ export async function getContributions(
   return data
 }
 
+export async function getRole(
+  org: string,
+  username: string,
+  installationId: number
+) {
+  const octokit = getOctokit(installationId)
+  const { data } = await octokit.rest.orgs.getMembershipForUser({
+    org, username
+  })
+
+  return data
+}
+
+export async function getMaintainers(
+  owner: string,
+  repo: string,
+  installationId: number
+) {
+  const octokit = getOctokit(installationId)
+  const { data } = await octokit.rest.repos.listCollaborators({
+    owner,
+    repo,
+  })
+  console.log(data);
+
+  return data
+}
+
 export async function createIssue(
   owner: string,
   repo: string,

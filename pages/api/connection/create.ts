@@ -4,7 +4,7 @@ import { createIssue } from "@utils/ghHandler"
 import type { NextApiRequest, NextApiResponse } from "next"
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { token, installationId, repoId, slicerId, safeAddress } = req.body
+  const { token, installationId, repoId, slicerId, safeAddress, spaceName } = req.body
 
   try {
     const Authorization = "Bearer " + token
@@ -36,7 +36,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       data: {
         repoId: Number(repoId),
         slicerId: Number(slicerId),
-        safeAddress
+        safeAddress,
+        spaceName
       }
     })
     console.log(4)

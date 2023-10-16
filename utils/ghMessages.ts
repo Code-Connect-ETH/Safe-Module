@@ -40,17 +40,14 @@ export function onPrOpenedMessage(
 
   ---
   
-  To request slices, comment using this template by specifying the **Ethereum addresses** of the contributors involved and the **desired amount of slices** for each.
+  To request slices, comment using this template by specifying the **Ethereum addresses** of the contributors involved.
   
   \`\`\`
-  Include any optional details related to your request here.
-  
-  ### Slice distribution request
-  
-  - contributor.eth : 1000
-  - 0x... : 500
-  - reviewer.eth : 50
+ /request 0x...... Any option text
   \`\`\`
+
+  After adding all addresses use \`/distribut\` to create proposal.
+  Finally member of org can use \`/merge\` to create slice distribution request on safe.
   
   > Current total slices (${today.toDateString()}): ${formatNumber(totalSlices)}
   `
@@ -107,16 +104,15 @@ export async function onSlicesRequestMessage(
 
   return [
     "### Scheduled slice distribution \n| Address | Slices |\n| --- | --- |\n" +
-      resolvedArray.join(" \n ") +
-      "\n \n > **Slices to be minted:** " +
-      String(slicesToBeMinted) +
-      ` (${
-        Math.floor(
-          (slicesToBeMinted / (totalSlices + slicesToBeMinted)) * 100000
-        ) / 1000
-      }% of ${formatNumber(
-        totalSlices + slicesToBeMinted
-      )} future total slices)`,
+    resolvedArray.join(" \n ") +
+    "\n \n > **Slices to be minted:** " +
+    String(slicesToBeMinted) +
+    ` (${Math.floor(
+      (slicesToBeMinted / (totalSlices + slicesToBeMinted)) * 100000
+    ) / 1000
+    }% of ${formatNumber(
+      totalSlices + slicesToBeMinted
+    )} future total slices)`,
     isSuccess,
     totalSlices
   ]

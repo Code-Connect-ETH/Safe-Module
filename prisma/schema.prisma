@@ -15,6 +15,7 @@ model Connection {
   repoId        Int      @unique
   slicerId      Int     
   safeAddress   String
+  spaceName String
 
   @@index([repoId], name:"repoId")
 }

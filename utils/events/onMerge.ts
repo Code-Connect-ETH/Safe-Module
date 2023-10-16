@@ -7,37 +7,43 @@ import { createComment } from "@utils/ghHandler"
 import { proposeTransaction } from "@utils/proposeSafeTransaction"
 
 export default async function onMerge(payload: PullRequestEvent) {
-  const connection: Connection = await getConnection(payload.repository.id)
-  const { slicerId, safeAddress } = connection
+  console.log("on merge");
 
-  const pinnedBotComment = await getPinnedComment(
-    <PullRequestEvent & IssueCommentEvent>payload
-  )
+  // const connection: Connection = await getConnection(payload.repository.id)
+  // const { slicerId, safeAddress } = connection
 
-  if (pinnedBotComment) {
-    const accountsToReslice = await formatAccountsToReslice(
-      pinnedBotComment.body
-    )
+  // const pinnedBotComment = await getPinnedComment(
+  //   <PullRequestEvent & IssueCommentEvent>payload
+  // )
 
-    if (accountsToReslice.length) {
-      const status = await proposeTransaction(
-        accountsToReslice,
-        safeAddress,
-        slicerId
-      )
+  // if (pinnedBotComment) {
+  //   const accountsToReslice = await formatAccountsToReslice(
+  //     pinnedBotComment.body
+  //   )
 
-      const message =
-        status == 201
-          ? "Successfully proposed transaction on the Gnosis Safe 🎉"
-          : "Due to an unexpected issue the transaction has not been proposed on the Gnosis Safe. Please contact the project's maintainers."
+  //   if (accountsToReslice.length) {
+  //     const status = await proposeTransaction(
+  //       accountsToReslice,
+  //       safeAddress,
+  //       slicerId
+  //     )
 
-      await createComment(
-        payload.repository.owner.login,
-        payload.repository.name,
-        payload.pull_request.number,
-        message,
-        payload.installation.id
-      )
-    }
-  }
+  //     const message =
+  //       status == 201
+  //         ? "Successfully proposed transaction on the Gnosis Safe 🎉"
+  //         : "Due to an unexpected issue the transaction has not been proposed on the Gnosis Safe. Please contact the project's maintainers."
+
+  //     await createComment(
+  //       payload.repository.owner.login,
+  //       payload.repository.name,
+  //       payload.pull_request.number,
+  //       message,
+  //       payload.installation.id
+  //     )
+  //   }
+
+  //   // propose(accountsToReslice.map(e => e.account), `PR:${payload.organization.login}/${payload.repository.name}:${payload.pull_request.id}`, connection.spaceName)
+
+  // }
+
 }
