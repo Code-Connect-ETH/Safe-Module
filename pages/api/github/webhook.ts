@@ -35,7 +35,7 @@ export default async function handler(
 
   if (verified) {
 
-    if (!body.issue?.pull_request && (body.action == "closed" || body.action == "issue closed")) {
+    if (body.issue && !body.issue?.pull_request && (body.action == "closed" || body.action == "issue closed")) {
       await onIssueClosed(body)
       res.status(200).json({ message: "OK" })
       return

@@ -46,7 +46,7 @@ export function onPrOpenedMessage(
  /request 0x...... Any option text
   \`\`\`
 
-  After adding all addresses use \`/distribut\` to create proposal.
+  After adding all addresses use \`/distribute\` to create proposal.
   Finally member of org can use \`/merge\` to create slice distribution request on safe.
   
   > Current total slices (${today.toDateString()}): ${formatNumber(totalSlices)}
