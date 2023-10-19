@@ -71,28 +71,24 @@ const FormSpaces = ({ spaceName, setSpaceName, message }: Props) => {
               If you haven&apos;t created one for your project yet, you can do
               so on the{" "}
               <a
-                href="https://gnosis-safe.io/app"
+                href="https://demo.snapshot.org/#/setup"
                 target="_blank"
                 rel="noreferrer"
                 className="text-blue-600 hover:underline"
                 onClick={() => saEvent("gnosis_link")}
               >
-                Gnosis Safe app
+                Snapshot app
               </a>
             </>
           }
           question={
             <>
               <p>
-                The chosen Safe will approve the slices to be minted for each
-                PR, so in most cases should be owned by the project&apos;s
-                maintainers.
+                The chosen Space will used to create proposals.
               </p>
 
               <p>
-                As the Slicer controller, the Safe can choose which currencies
-                the Slicer should accept besides ETH, or sell products on its
-                decentralized storefront.
+                After slicer is created use that as strategy along with weighted voting.
               </p>
             </>
           }
