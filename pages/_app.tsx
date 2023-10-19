@@ -12,7 +12,7 @@ import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { createConfig, configureChains, WagmiConfig, mainnet } from "wagmi";
 import "@rainbow-me/rainbowkit/styles.css";
-import { base } from "./networks";
+import { base } from "../networks";
 const env = String(process.env.NEXT_PUBLIC_ENV);
 const alchemyId = String(process.env.NEXT_PUBLIC_ALCHEMY_ID);
 
