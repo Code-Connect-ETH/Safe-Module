@@ -18,6 +18,7 @@ type Proposal = {
   state: string;
   choices: string[];
   scores: number[];
+  scores_total:number;
 }
 
 export default async function onComment(payload: IssueCommentEvent) {
