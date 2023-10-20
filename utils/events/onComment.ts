@@ -152,7 +152,7 @@ export default async function onComment(payload: IssueCommentEvent) {
     const mints: Mint[] = res.data.proposal.choices.map((e, i) => {
       return {
         account: e,
-        shares: Math.ceil((total_slices/res.data.scores_total) * (res.data.proposal.scores?.[i] ?? 0))
+        shares: Math.ceil((total_slices/res.data.proposal.scores_total) * (res.data.proposal.scores?.[i] ?? 0))
       }
     })
     const status = await proposeTransaction(
